@@ -6,6 +6,10 @@
     </form>
     <div>
       <img v-bind:key="image.id" v-for="image in images" v-bind:src="image.urls.small" alt="" />
+      <span v-if="loading">Loading ...</span>
+    </div>
+    <div v-if="images.length > 0">
+      <button v-if="end == false" v-on:click="load_more"> Load More Cool Images about {{search}} </button>
     </div>
   </div>
 </template>
@@ -19,14 +23,33 @@ export default {
   data() {
     return {
       search: '',
+      loading: false,
+      page: 1,
+      end: false,
       images: []
     };
   },
   methods: {
     fetchimages: function() {
+      this.loading = true;
       axios
-      .get("https://api.unsplash.com/search/photos?client_id=" + ID + "&page=1&query=" + this.search + "&per_page=3")
-      .then(response => (this.images = response.data.results));
+      .get(
+        "https://api.unsplash.com/search/photos?client_id=" + ID + "&page=" + this.page + "&query=" + this.search + "&per_page=2&order_by=latest"
+      )
+      .then(response => {
+        response.data.results.map(image => {
+          this.images.push(image);
+        });
+      })
+      .catch(e => {
+        this.end = true;
+        console.log(e);
+      });
+      this.loading = false;
+    },
+    load_more: function() {
+      this.page += 1;
+      this.fetchimages();
     }
   },
   props: {}
