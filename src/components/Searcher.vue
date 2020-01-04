@@ -4,7 +4,7 @@
       <input id="search" type="text" v-model="search" />
       <input type="submit" value="Search" v-on:click="fetchimages" />
     </form>
-    <div>
+    <div class="images">
       <img v-bind:key="image.id" v-for="image in images" v-bind:src="image.urls.small" alt="" />
       <span v-if="loading">Loading ...</span>
     </div>
@@ -69,5 +69,16 @@ export default {
 #search {
   width: 300px;
   padding: 1em;
+}
+.images {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+  align-items: center;
+}
+.images > * {
+  margin: 1em;
+  border-radius: 1em;
 }
 </style>
