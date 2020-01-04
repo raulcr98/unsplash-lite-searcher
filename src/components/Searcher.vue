@@ -77,8 +77,13 @@ export default {
   justify-content: space-evenly;
   align-items: center;
 }
-.images > * {
+.images > img {
   margin: 1em;
   border-radius: 1em;
+  transition: .3s ease all;
+}
+.images > img:hover {
+  box-shadow: 1px 1px 20px rgba(1, 1, 1, .4);
+  transform: scale(1.01);
 }
 </style>
