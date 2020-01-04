@@ -4,6 +4,7 @@
       <li>
         <h1>Unsplash-Lite-Searcher</h1>
       </li>
+      <li>Made by <a href="https://raulcr98.github.io/mysite">raulcr98</a></li>
     </ul>
   </div>
 </template>
@@ -24,5 +25,8 @@ ul {
 }
 li {
   list-style: none;
+}
+h1 {
+  color: #114b5f;
 }
 </style>

@@ -1,15 +1,14 @@
 <template>
   <div id="container">
     <form class="form" v-on:submit.prevent>
-      <input id="search" type="text" v-model="search" />
-      <input type="submit" value="Search" v-on:click="fetchimages" />
+      <input id="search" type="text" v-model="search" placeholder="Type some keywords" />
+      <input class="primary" type="submit" value="Search" v-on:click="fetchimages" :disabled="search == last_search"/>
     </form>
     <div class="images">
       <img v-bind:key="image.id" v-for="image in images" v-bind:src="image.urls.small" alt="" />
-      <span v-if="loading">Loading ...</span>
     </div>
-    <div v-if="images.length > 0">
-      <button v-if="end == false" v-on:click="load_more"> Load More Cool Images about {{search}} </button>
+    <div v-if="images.length > 0" id="load_more">
+      <button class="primary" v-if="end == false" v-on:click="load_more"> Load More Cool Images about {{search}} </button>
     </div>
   </div>
 </template>
@@ -22,8 +21,8 @@ export default {
   name: "container",
   data() {
     return {
+      last_search: '',
       search: '',
-      loading: false,
       page: 1,
       end: false,
       images: []
@@ -31,10 +30,14 @@ export default {
   },
   methods: {
     fetchimages: function() {
-      this.loading = true;
+      if(this.last_search != this.search){
+        this.images = [];
+        this.end = false;
+        this.page = 1;
+      }
       axios
       .get(
-        "https://api.unsplash.com/search/photos?client_id=" + ID + "&page=" + this.page + "&query=" + this.search + "&per_page=2&order_by=latest"
+        "https://api.unsplash.com/search/photos?client_id=" + ID + "&page=" + this.page + "&query=" + this.search + "&per_page=6&order_by=latest"
       )
       .then(response => {
         response.data.results.map(image => {
@@ -45,7 +48,7 @@ export default {
         this.end = true;
         console.log(e);
       });
-      this.loading = false;
+      this.last_search = this.search;
     },
     load_more: function() {
       this.page += 1;
@@ -85,5 +88,25 @@ export default {
 .images > img:hover {
   box-shadow: 1px 1px 20px rgba(1, 1, 1, .4);
   transform: scale(1.01);
+}
+#load_more {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  margin-bottom: 2em;
+}
+#load_more > button {
+  margin-top: 2em;
+}
+.primary {
+  padding: 1em;
+  background: #456990;
+  border: none;
+  color: #e4fde1;
+  border-radius: 5px;
+  transition: .3s;
+}
+.primary:hover {
+  background: #114b5f;
 }
 </style>

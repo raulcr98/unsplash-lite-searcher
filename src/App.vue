@@ -13,7 +13,7 @@ export default {
   name: "app",
   components: {
     Header,
-    Searcher
+    Searcher,
   }
 };
 </script>
